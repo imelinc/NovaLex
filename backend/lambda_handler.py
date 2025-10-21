@@ -22,7 +22,32 @@ def lambda_handler(event, context):
     user_query = None # Aca inicializamos la variable de la consulta del usuario
     if slots.get('query') and slots['query'].get('value'): # buscamos el slot 'query' y su valor
         user_query = slots['query']['value']['interpretedValue'] # Extraemos el valor del slot 'query'
-    
-    # ifnormacion para debugging
+
+    # informacion para debugging
     print(f"Intent detectado: {intent_name}")
     print(f"Consulta del usuario: {user_query}")
+    
+    # Aca iria la logica para procesar la consulta del usuario con IA
+    # Por ahora, solo vamos a responder con un mensaje de confirmacion
+    response_message = f"Recibí tu consulta: '{user_query}'. Pronto te responderé con IA!"
+    
+    # Construimos la respuesta para Lex
+    response = {
+        'sessionState': {
+            'dialogAction': {
+                'type': 'Close'
+            },
+            'intent': {
+                'name': intent_name,
+                'state': 'Fulfilled'
+            }
+        },
+        'messages': [
+            {
+                'contentType': 'PlainText',
+                'content': response_message
+            }
+        ]
+    }
+    
+    return response
