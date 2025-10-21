@@ -20,23 +20,39 @@ def lambda_handler(event, context):
 
     #Vamos a extraer informacion del intent de Lex
     session_id = event.get('sessionId', '') # id de la sesion
-    intent_name = event['sessionState']['intent']['name'] # nombre del intent (ConsultaGeneral)
-    slots = event['sessionState']['intent']['slots'] # slots del intent que detecto Lex
+    intent_name = ( # nombre del intent (ConsultaGeneral)
+    event.get('sessionState', {})
+         .get('intent', {})
+         .get('name', 'ConsultaLibre')
+)
+
+    slots = ( # slots del intent que detecto Lex
+    event.get('sessionState', {})
+         .get('intent', {})
+         .get('slots', {})
+)
+
     
-    user_query = None # Aca inicializamos la variable de la consulta del usuario
-    if slots.get('query') and slots['query'].get('value'): # buscamos el slot 'query' y su valor
-        user_query = slots['query']['value']['interpretedValue'] # Extraemos el valor del slot 'query'
+    # Capturar texto directo del usuario primero
+    user_query = event.get("inputTranscript", None)
+    if not user_query:
+        # Si no viene en inputTranscript, intentar con slot
+        if slots.get('query') and slots['query'].get('value'):
+            user_query = slots['query']['value']['interpretedValue']
+
 
     # informacion para debugging
     print(f"Session ID: {session_id}")
     print(f"Intent detectado: {intent_name}")
     print(f"Consulta del usuario: {user_query}")
     
+    # Si no se capturó texto, usar un mensaje genérico pero igual llamar a Bedrock
     if not user_query:
-        response_message = "No se pudo procesar tu consulta. Por favor, intenta nuevamente."
-    else:
-        response_message = get_ai_response(user_query)
-        
+        user_query = "Ayúdame con algo útil"
+
+    # Siempre obtener respuesta de Bedrock
+    response_message = get_ai_response(user_query)
+
     # Construimos la respuesta para Lex
     response = {
         'sessionState': {
