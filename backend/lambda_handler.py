@@ -19,6 +19,7 @@ def lambda_handler(event, context):
     print(f"Evento completo: {json.dumps(event, indent=2)}")
 
     #Vamos a extraer informacion del intent de Lex
+    session_id = event.get('sessionId', '') # id de la sesion
     intent_name = event['sessionState']['intent']['name'] # nombre del intent (ConsultaGeneral)
     slots = event['sessionState']['intent']['slots'] # slots del intent que detecto Lex
     
@@ -27,6 +28,7 @@ def lambda_handler(event, context):
         user_query = slots['query']['value']['interpretedValue'] # Extraemos el valor del slot 'query'
 
     # informacion para debugging
+    print(f"Session ID: {session_id}")
     print(f"Intent detectado: {intent_name}")
     print(f"Consulta del usuario: {user_query}")
     
@@ -44,14 +46,17 @@ def lambda_handler(event, context):
             'intent': {
                 'name': intent_name,
                 'state': 'Fulfilled'
-            }
+            },
+            'sessionAttributes': event['sessionState'].get('sessionAttributes', {})
         },
         'messages': [
             {
                 'contentType': 'PlainText',
                 'content': response_message
             }
-        ]
+        ],
+        'sessionId': session_id,
+        'requestAttributes': event.get('requestAttributes', {})
     }
     
     return response
