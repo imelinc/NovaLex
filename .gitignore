@@ -1,0 +1,77 @@
+# ==============================================
+# SISTEMA OPERATIVO
+# ==============================================
+# Archivos temporales de macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Archivos de volúmenes externos
+.Spotlight-V100
+.Trashes
+
+# ==============================================
+# VISUAL STUDIO CODE
+# ==============================================
+.vscode/
+*.code-workspace
+.history/
+*.log
+
+# ==============================================
+# PROYECTO AWS LAMBDA / NODE / PYTHON
+# ==============================================
+# Dependencias locales
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Entornos virtuales
+.env
+.venv/
+env/
+venv/
+
+# Paquetes Lambda comprimidos
+*.zip
+
+# ==============================================
+# FRONTEND (si usas S3/CloudFront)
+# ==============================================
+dist/
+build/
+.cache/
+*.bak
+
+# ==============================================
+# CONFIGURACIÓN Y CLAVES
+# ==============================================
+# Archivos con credenciales o configuraciones locales
+*.env.local
+.aws/
+*.pem
+*.key
+*.crt
+
+# ==============================================
+# LOGS Y TEMPORALES
+# ==============================================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+temp/
+.tmp/
+
+# ==============================================
+# MISCELÁNEOS
+# ==============================================
+# Archivos de sistema o herramientas
+Thumbs.db
+desktop.ini
+.idea/
